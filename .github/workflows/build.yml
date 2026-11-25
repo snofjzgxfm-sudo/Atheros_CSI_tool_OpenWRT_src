@@ -1,0 +1,29 @@
+name: Build WR841N v8 CSI 12.09
+on: [workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install deps
+        run: |
+          sudo apt update -qq
+          sudo apt install -y build-essential git libncurses5-dev zlib1g-dev gawk flex gettext wget unzip python2 subversion gcc-multilib
+      - name: Feeds
+        run: |
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+      - name: Config WR841N v8
+        run: |
+          make defconfig
+          echo "CONFIG_TARGET_ar71xx=y" >> .config
+          echo "CONFIG_TARGET_ar71xx_generic=y" >> .config
+          echo "CONFIG_TARGET_ar71xx_generic_TLWR841N_v8=y" >> .config
+          make defconfig
+      - name: Build
+        run: make -j$(nproc) V=s
+      - name: Upload firmware
+        uses: actions/upload-artifact@v3
+        with:
+          name: wr841n-v8-csi-12.09
+          path: bin/ar71xx/*wr841n-v8*sysupgrade.bin
