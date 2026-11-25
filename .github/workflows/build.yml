@@ -6,7 +6,11 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: ubuntu:20.04
+    env:
+      DEBIAN_FRONTEND: noninteractive
+      TZ: Asia/Jakarta
     steps:
+  
       - uses: actions/checkout@v4
       - name: Install deps
         run: |
