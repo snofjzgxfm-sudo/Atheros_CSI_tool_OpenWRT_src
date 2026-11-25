@@ -7,7 +7,7 @@ jobs:
     container:
       image: ubuntu:20.04
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Install deps
         run: |
           sudo apt update -qq
@@ -26,7 +26,7 @@ jobs:
       - name: Build
         run: make -j$(nproc) V=s
       - name: Upload firmware
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: wr841n-v8-csi-12.09
           path: bin/ar71xx/*wr841n-v8*sysupgrade.bin
